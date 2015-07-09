@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="MDM - assets deployment" default="deploy_assets"
+	basedir="..">
+
+	<property name="minibus.assets.dir" value="${basedir}/vendor/dsi-agpt/minibus/assets" />
+	<property name="jobs.assets.dir" value="${basedir}/module/Jobs/assets" />
+	<property name="public.dir" value="${basedir}/public" />
+	<target name="deploy_assets">
+		<antcall target="deploy_minibus_assets">
+		</antcall>
+		<antcall target="compile_css">
+		</antcall>
+	</target>
+	<target name="deploy_minibus_assets">
+		<copy todir="${public.dir}">
+			<fileset dir="${minibus.assets.dir}" excludes="*/*.less">
+			</fileset>
+			<fileset dir="${jobs.assets.dir}" excludes="*/*.less">
+			</fileset>
+		</copy>
+	</target>
+	<target name="compile_css">
+		<exec executable="find" output="${public.dir}/css/style.css">
+			<arg line="${basedir}/.." />
+			<arg line="-wholename '*/css/style.less' " />
+			<arg line="-exec lessc {} ;" />
+		</exec>
+	</target>
+
+</project>

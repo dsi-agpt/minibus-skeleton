@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Déploiement MDM" default="deploy" basedir="..">
+	<macrodef name="propertycopy">
+		<attribute name="name" />
+		<attribute name="from" />
+		<sequential>
+			<property name="@{name}" value="${@{from}}" />
+		</sequential>
+	</macrodef>
+	<property name="script.dir" value="${basedir}/scripts">
+
+	</property>
+	<property name="local.php.file.path" value="config/autoload">
+	</property>
+	<property name="local.pcl.file.path" value="scripts/pcl/ApresCandidature/config">
+	</property>
+
+	<property name="local.jobs.php.file.name" value="jobs.local.php">
+	</property>
+	<property name="local.minibus.php.file.name" value="minibus.local.php">
+	</property>
+	<property name="ldap.local.php.file.name" value="ldap.local.php">
+	</property>
+	<property name="local.pcl.file.name" value="apres_candidature.properties">
+	</property>
+	<property name="local.jobs.php.template.file.name" value="${basedir}/module/Jobs/config/${local.jobs.php.file.name}.dist">
+	</property>
+	<property name="local.minibus.php.template.file.name" value="${basedir}/vendor/dsi-agpt/minibus/config/${local.minibus.php.file.name}.dist">
+	</property>
+	<property name="ldap.local.php.template.file.name" value="${ldap.local.php.file.name}.dist">
+	</property>
+	<property name="local.pcl.template.file.name" value="${local.pcl.file.name}.dist">
+	</property>
+	<property name="tmp.files.path" value="/tmp">
+	</property>
+
+	<loadproperties srcfile="${script.dir}/deploiement.properties">
+	</loadproperties>
+	<property name="doctrine.update.file" value="scripts/doctrine-tools-update.sh">
+	</property>
+	<propertycopy from="env.TARGET" name="target" />
+	<propertycopy from="${target}.remote.db.password" name="remote.db.password" />
+	<propertycopy from="${target}.remote.arvus.password" name="remote.arvus.password" />
+	<propertycopy from="${target}.remote.agite.password" name="remote.agite.password" />
+	<propertycopy from="${target}.remote.preinscription.password" name="remote.preinscription.password" />
+	<propertycopy from="${target}.remote.ent.wsapi.authkey" name="remote.ent.wsapi.authkey" />
+	<property name="remote.classmap.generator.path" value="${remote.web.code.dir}/vendor/zendframework/zendframework/bin/classmap_generator.php">
+	</property>
+	<target name="deploy">
+
+		<antcall target="load_dependencies">
+		</antcall>
+		<ant antfile="${basedir}/scripts/build-assets.xml">
+		</ant>
+		<antcall target="deploy_all_files">
+		</antcall>
+		<antcall target="deploy_local_parameters">
+		</antcall>
+		<antcall target="generate_autoloader">
+		</antcall>
+		<antcall target="update_database">
+		</antcall>
+		<antcall target="change_permissions">
+		</antcall>
+	</target>
+	<target name="generate_autoloader">
+		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir}/module/Jobs;php ${remote.classmap.generator.path} .)" />
+
+	</target>
+	<target name="deploy_all_files">
+		<exec dir="." executable="rsync" failonerror="true">
+			<arg line="-av -e ssh --delete " />
+			<arg line="--exclude-from='${script.dir}/exclusion_rsync.txt'" />
+			<arg line="'/${basedir}/' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}'" />
+		</exec>
+	</target>
+	<target name="deploy_local_parameters">
+		<copy overwrite="true" verbose="true" file="${local.minibus.php.template.file.name}" tofile="${tmp.files.path}/${local.minibus.php.file.name}" failonerror="true">
+			<filterset begintoken="%" endtoken="%">
+				<filter token="MINIBUS_DB_HOST" value="${remote.db.host}" />
+				<filter token="MINIBUS_DB_PORT" value="${remote.db.port}" />
+				<filter token="MINIBUS_DB_USER" value="${remote.db.user}" />
+				<filter token="MINIBUS_DB_PASSWORD" value="${remote.db.password}" />
+				<filter token="MINIBUS_DB_DBNAME" value="${remote.db.dbname}" />
+				<filter token="DATA_DIRECTORY" value="${remote.data.dir}" />
+				<filter token="LOGS_DIRECTORY" value="${remote.logs.dir}" />
+
+			</filterset>
+		</copy>
+		<exec dir="." executable="rsync" failonerror="false">
+			<arg line="-av -e ssh" />
+			<arg line="'${tmp.files.path}/${local.minibus.php.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.php.file.path}'" />
+		</exec>
+		<copy overwrite="true" verbose="true" file="${local.jobs.php.template.file.name}" tofile="${tmp.files.path}/${local.jobs.php.file.name}" failonerror="true">
+			<filterset begintoken="%" endtoken="%">
+				<filter token="HOST_ARVUS" value="${remote.arvus.host}" />
+				<filter token="PORT_ARVUS" value="${remote.arvus.port}" />
+				<filter token="USER_ARVUS" value="${remote.arvus.user}" />
+				<filter token="PASSWORD_ARVUS" value="${remote.arvus.password}" />
+				<filter token="DBNAME_ARVUS" value="${remote.arvus.dbname}" />
+				<filter token="HOST_AGITE" value="${remote.agite.host}" />
+				<filter token="PORT_AGITE" value="${remote.agite.port}" />
+				<filter token="USER_AGITE" value="${remote.agite.user}" />
+				<filter token="PASSWORD_AGITE" value="${remote.agite.password}" />
+				<filter token="DBNAME_AGITE" value="${remote.agite.dbname}" />
+				<filter token="HOST_PREINSCRIPTION" value="${remote.preinscription.host}" />
+				<filter token="PORT_PREINSCRIPTION" value="${remote.preinscription.port}" />
+				<filter token="USER_PREINSCRIPTION" value="${remote.preinscription.user}" />
+				<filter token="PASSWORD_PREINSCRIPTION" value="${remote.preinscription.password}" />
+				<filter token="DBNAME_PREINSCRIPTION" value="${remote.preinscription.dbname}" />
+				<filter token="URL_ENT" value="${remote.ent.url}" />
+				<filter token="ENT_WS_API_AUTH_KEY" value="${remote.ent.wsapi.authkey}" />
+				<filter token="HOST_PCL" value="${remote.pcl.host}" />
+				<filter token="PORT_PCL" value="${remote.pcl.port}" />
+				<filter token="USERNAME_PCL" value="${remote.pcl.username}" />
+				<filter token="PUBKEYFILE_PCL" value="${remote.pcl.pubkeyfile}" />
+				<filter token="PRIVKEYFILE_PCL" value="${remote.pcl.privkeyfile}" />
+				<filter token="PASSPHRASE_PGP_PCL" value="${remote.pcl.pgp.passphrase}" />
+			</filterset>
+		</copy>
+		<exec dir="." executable="rsync" failonerror="false">
+			<arg line="-av -e ssh" />
+			<arg line="'${tmp.files.path}/${local.jobs.php.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.php.file.path}'" />
+		</exec>
+		<copy overwrite="true" verbose="true" file="${basedir}/${local.php.file.path}/${ldap.local.php.template.file.name}" tofile="${tmp.files.path}/${ldap.local.php.file.name}" failonerror="true">
+
+		</copy>
+		<exec dir="." executable="rsync" failonerror="false">
+			<arg line="-av -e ssh" />
+			<arg line="'${tmp.files.path}/${ldap.local.php.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.php.file.path}'" />
+		</exec>
+		<copy overwrite="true" verbose="true" file="${basedir}/${local.pcl.file.path}/${local.pcl.template.file.name}" tofile="${tmp.files.path}/${local.pcl.file.name}" failonerror="true">
+			<filterset begintoken="%" endtoken="%">
+				<filter token="MINIBUS_DB_HOST" value="${remote.db.host}" />
+				<filter token="MINIBUS_DB_PORT" value="${remote.db.port}" />
+				<filter token="MINIBUS_DB_USER" value="${remote.db.user}" />
+				<filter token="MINIBUS_DB_PASSWORD" value="${remote.db.password}" />
+				<filter token="MINIBUS_DB_DBNAME" value="${remote.db.dbname}" />
+
+			</filterset>
+		</copy>
+		<exec dir="." executable="rsync" failonerror="false">
+			<arg line="-av -e ssh" />
+			<arg line="'${tmp.files.path}/${local.pcl.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.pcl.file.path}'" />
+		</exec>
+		<delete file="${tmp.files.path}/${local.php.file.name}" failonerror="true" />
+		<delete file="${tmp.files.path}/${ldap.local.php.file.name}" failonerror="true" />
+		<delete file="${tmp.files.path}/${local.pclp.file.name}" failonerror="true" />
+
+	</target>
+
+	<target name="update_database">
+		<echo message="${remote.web.user}">
+		</echo>
+		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};./${doctrine.update.file})" />
+
+	</target>
+	<target name="load_dependencies">
+		<exec dir="${basedir}" executable="php" failonerror="true">
+			<arg line="composer.phar install" />
+		</exec>
+	</target>
+	<target name="change_permissions">
+		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};chown -R www-data data;chmod -R g+w data;chmod -R o+w scripts/pcl/ApresCandidature/data;)" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(mkdir -pv ${remote.logs.dir};chown -R www-data ${remote.data.dir};chmod -R g+w ${remote.data.dir})" />
+
+	</target>
+
+</project>

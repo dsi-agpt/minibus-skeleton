@@ -1,0 +1,2 @@
+dornbusch=admin
+bob=guest

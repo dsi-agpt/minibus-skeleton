@@ -1,0 +1,15 @@
+data/cache/*
+config/autoload/jobs.local.php
+config/autoload/minibus.local.php
+etc
+outils
+tests
+.git
+script/*
+composer.json
+composer.lock
+composer.phar
+LICENSE.txt
+README.md
+config/autoload/local.php*
+data/logs/ldap.log
