@@ -1,8 +1,8 @@
 {
-    "name": "agpt/ped",
-    "description": "Data transfer software",
+    "name": "agpt/minibus-skeleton",
+    "description": "Zend based data transfer application deployment example",
     "keywords": [
-        "framework",
+        "bus",
         "zf2"
     ],
     "require": {
