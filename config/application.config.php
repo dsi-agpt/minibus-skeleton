@@ -5,7 +5,6 @@ return array(
     'modules' => array(
         'ZfcBase',
         'ZfcUser',
-        'ZfcUserLdap',
         'DoctrineModule',
         'DoctrineORMModule',
         'JMSSerializerModule',

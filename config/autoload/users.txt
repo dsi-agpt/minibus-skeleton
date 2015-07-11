@@ -1,2 +1,2 @@
-dornbusch=admin
-bob=guest
+admin=admin
+guest=guest

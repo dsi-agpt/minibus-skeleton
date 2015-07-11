@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<skipper version="3.2.3.1247" mvc="Zend Framework" orm="Doctrine2" name="DataTransfer" uuid="c18f9d55-afc1-48d9-86e7-3feacc67ea4e">
+  <module name="\Jobs" local-name="Jobs" namespace="\Jobs\Model\Entity" local-namespace="Jobs\Model\Entity" export-format="Doctrine2Php" export-path="../../src/Jobs/Model/Entity" uuid="6c891de7-63a5-4834-91c1-41a86c064004">
+    <entity name="\Jobs\Model\Entity\User" local-name="User" namespace="\Jobs\Model\Entity" uuid="048a03e9-d52e-48a1-b4ba-8dca070fa78e">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="5186ab0f-fc62-4aa9-a5ed-99ddc4de5503"/>
+      <field name="username" type="string" size="150" uuid="e300a35e-a0da-425a-b60d-73435adee76d"/>
+      <field name="email" type="string" size="150" uuid="ebd33727-b290-459b-830b-0a73357edcdc"/>
+      <field name="displayname" type="string" size="150" uuid="86b651b7-fe4d-49bc-9107-d44d4b31d6a1"/>
+      <field name="password" type="string" size="150" uuid="1ce6d782-d757-4d39-9b4d-23c75746a127"/>
+      <field name="state" type="integer" size="150" uuid="9a33b79d-a78b-4742-9ddc-aae9cb028aee"/>
+      <orm-attributes>
+        <attribute name="table">user</attribute>
+      </orm-attributes>
+    </entity>
+    <orm-attributes>
+      <attribute name="file-suffix">without-suffix</attribute>
+      <attribute name="filename-format">entity-name-only</attribute>
+    </orm-attributes>
+  </module>
+  <visual-data>
+    <entity uuid="048a03e9-d52e-48a1-b4ba-8dca070fa78e" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="298" position-y="131" size-x="0" size-x2="143" size-y="0" size-y2="493"/>
+    <module uuid="6c891de7-63a5-4834-91c1-41a86c064004" bg-color="#FDEBEF" position-x="50" position-y="50" size-x="0" size-x2="1874" size-y="0" size-y2="3646"/>
+    <project uuid="c18f9d55-afc1-48d9-86e7-3feacc67ea4e" size-x="0" size-x2="3323" size-y="0" size-y2="4082"/>
+  </visual-data>
+</skipper>

@@ -21,7 +21,7 @@ $settings = array (
 		 * instead of the default one provided. Default is ZfcUser\Entity\User.
 		 * The entity class should implement ZfcUser\Entity\UserInterface
 		 */
-		'user_entity_class' => 'ZfcUserLdap\Entity\User',
+		'user_entity_class' => 'Jobs\Model\Entity\User',
 		
 		/**
 		 * Enable registration
@@ -51,7 +51,7 @@ $settings = array (
 		 * Accepted values: array containing services that implement 'ZfcUser\Authentication\Adapter\ChainableAdapter'
 		 */
 		'auth_adapters' => array (
-				100 => 'ZfcUserLdap\Authentication\Adapter\Ldap' 
+				100 => 'ZfcUser\Authentication\Adapter\Db' 
 		),
 		
 		/**
