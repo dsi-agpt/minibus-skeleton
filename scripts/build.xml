@@ -25,7 +25,7 @@
 	</loadproperties>
 	<property name="doctrine.update.file" value="scripts/doctrine-tools-update.sh">
 	</property>
-	<propertycopy from="${target}.remote.db.password" name="remote.db.password" />
+	<propertycopy from="minibus.demo.remote.db.password" name="remote.db.password" />
 	<property name="remote.classmap.generator.path" value="${remote.web.code.dir}/vendor/zendframework/zendframework/bin/classmap_generator.php">
 	</property>
 	<target name="deploy">
