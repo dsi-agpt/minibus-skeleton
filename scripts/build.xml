@@ -73,7 +73,7 @@
 		</exec>
 	</target>
 	<target name="create_database">
-		<execute_sql_without_database webhost="${remote.web.host}" webuser="${remote.web.user}" sqlfile="${remote.web.code.dir}/build/scripts/sql/create_db.sql" host="${remote.db.host}" user="${remote.db.user}" passwd="${remote.db.password}" />
+		<execute_sql_without_database webhost="${remote.web.host}" webuser="${remote.web.user}" sqlfile="${remote.web.code.dir}/scripts/sql/create_db.sql" host="${remote.db.host}" user="${remote.db.user}" passwd="${remote.db.password}" />
 
 	</target>
 	<target name="deploy_local_parameters">
