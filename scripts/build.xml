@@ -68,20 +68,6 @@
 	<target name="deploy_all_files">
 		<exec dir="." executable="rsync" failonerror="true">
 			<arg line="-av -e ssh --delete " />
-			<macrodef name="executer_sql_sans_base">
-				<attribute name="webhost" />
-				<attribute name="webuser" />
-				<attribute name="sqlfile" />
-				<attribute name="host" />
-				<attribute name="user" />
-				<attribute name="passwd" />
-
-				<sequential>
-					<echo message="@{webhost} @{webuser} mysql -u @{user} -p@{passwd} &lt; @{sqlfile}">
-					</echo>
-					<sshexec trust="true" host="@{webhost}" username="@{webuser}" keyfile="~/.ssh/id_rsa" failonerror="true" command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile}" />
-				</sequential>
-			</macrodef>
 			<arg line="--exclude-from='${script.dir}/exclusion_rsync.txt'" />
 			<arg line="'/${basedir}/' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}'" />
 		</exec>
