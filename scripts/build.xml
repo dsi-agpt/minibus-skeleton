@@ -17,9 +17,12 @@
 		<attribute name="passwd" />
 
 		<sequential>
-			<echo message="@{webhost} @{webuser} mysql -u @{user} -p@{passwd} &lt; @{sqlfile}">
+			<echo
+				message="@{webhost} @{webuser} mysql -u @{user} -p@{passwd} &lt; @{sqlfile}">
 			</echo>
-			<sshexec trust="true" host="@{webhost}" username="@{webuser}" keyfile="~/.ssh/id_rsa" failonerror="true" command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile}" />
+			<sshexec trust="true" host="@{webhost}" username="@{webuser}"
+				keyfile="~/.ssh/id_rsa" failonerror="true"
+				command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile}" />
 		</sequential>
 	</macrodef>
 	<macrodef name="execute_sql_with_database">
@@ -31,7 +34,9 @@
 		<attribute name="passwd" />
 		<attribute name="dbname" />
 		<sequential>
-			<sshexec trust="true" host="@{webhost}" username="@{webuser}" keyfile="~/.ssh/id_rsa" failonerror="true" command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile} @{dbname}" />
+			<sshexec trust="true" host="@{webhost}" username="@{webuser}"
+				keyfile="~/.ssh/id_rsa" failonerror="true"
+				command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile} @{dbname}" />
 		</sequential>
 	</macrodef>
 	<property name="script.dir" value="${basedir}/scripts">
@@ -43,16 +48,19 @@
 	</property>
 	<property name="local.minibus.php.file.name" value="minibus.local.php">
 	</property>
-	<property name="local.jobs.php.template.file.name" value="${basedir}/module/Jobs/config/${local.jobs.php.file.name}.dist">
+	<property name="local.jobs.php.template.file.name"
+		value="${basedir}/module/Jobs/config/${local.jobs.php.file.name}.dist">
 	</property>
-	<property name="local.minibus.php.template.file.name" value="${basedir}/vendor/dsi-agpt/minibus/config/${local.minibus.php.file.name}.dist">
+	<property name="local.minibus.php.template.file.name"
+		value="${basedir}/vendor/dsi-agpt/minibus/config/${local.minibus.php.file.name}.dist">
 	</property>
 	<loadproperties srcfile="${script.dir}/deploiement.properties">
 	</loadproperties>
 	<property name="doctrine.update.file" value="scripts/doctrine-tools-update.sh">
 	</property>
 	<propertycopy from="minibus.demo.remote.db.password" name="remote.db.password" />
-	<property name="remote.classmap.generator.path" value="${remote.web.code.dir}/vendor/zendframework/zendframework/bin/classmap_generator.php">
+	<property name="remote.classmap.generator.path"
+		value="${remote.web.code.dir}/vendor/zendframework/zendframework/bin/classmap_generator.php">
 	</property>
 	<target name="deploy">
 
@@ -70,26 +78,35 @@
 		</antcall>
 		<antcall target="update_database">
 		</antcall>
+		<antcall target="add_users">		    
+		</antcall>
 		<antcall target="change_permissions">
 		</antcall>
 	</target>
 	<target name="generate_autoloader">
-		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir}/module/Jobs;php ${remote.classmap.generator.path} .)" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}"
+			keyfile="~/.ssh/id_rsa"
+			command="(cd ${remote.web.code.dir}/module/Jobs;php ${remote.classmap.generator.path} .)" />
 
 	</target>
 	<target name="deploy_all_files">
 		<exec dir="." executable="rsync" failonerror="true">
 			<arg line="-av -e ssh --delete " />
 			<arg line="--exclude-from='${script.dir}/exclusion_rsync.txt'" />
-			<arg line="'/${basedir}/' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}'" />
+			<arg
+				line="'/${basedir}/' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}'" />
 		</exec>
 	</target>
 	<target name="create_database">
-		<execute_sql_without_database webhost="${remote.web.host}" webuser="${remote.web.user}" sqlfile="${remote.web.code.dir}/scripts/sql/create-db.sql" host="${remote.db.host}" user="${remote.db.user}" passwd="${remote.db.password}" />
+		<execute_sql_without_database webhost="${remote.web.host}"
+			webuser="${remote.web.user}" sqlfile="${remote.web.code.dir}/scripts/sql/create-db.sql"
+			host="${remote.db.host}" user="${remote.db.user}" passwd="${remote.db.password}" />
 
 	</target>
 	<target name="deploy_local_parameters">
-		<copy overwrite="true" verbose="true" file="${local.minibus.php.template.file.name}" tofile="${tmp.files.path}/${local.minibus.php.file.name}" failonerror="true">
+		<copy overwrite="true" verbose="true"
+			file="${local.minibus.php.template.file.name}" tofile="${tmp.files.path}/${local.minibus.php.file.name}"
+			failonerror="true">
 			<filterset begintoken="%" endtoken="%">
 				<filter token="MINIBUS_DB_HOST" value="${remote.db.host}" />
 				<filter token="MINIBUS_DB_PORT" value="${remote.db.port}" />
@@ -103,9 +120,12 @@
 		</copy>
 		<exec dir="." executable="rsync" failonerror="false">
 			<arg line="-av -e ssh" />
-			<arg line="'${tmp.files.path}/${local.minibus.php.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.php.file.path}'" />
+			<arg
+				line="'${tmp.files.path}/${local.minibus.php.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.php.file.path}'" />
 		</exec>
-		<copy overwrite="true" verbose="true" file="${local.jobs.php.template.file.name}" tofile="${tmp.files.path}/${local.jobs.php.file.name}" failonerror="true">
+		<copy overwrite="true" verbose="true"
+			file="${local.jobs.php.template.file.name}" tofile="${tmp.files.path}/${local.jobs.php.file.name}"
+			failonerror="true">
 			<filterset begintoken="%" endtoken="%">
 				<filter token="FOO" value="foo" />
 
@@ -113,22 +133,29 @@
 		</copy>
 		<exec dir="." executable="rsync" failonerror="false">
 			<arg line="-av -e ssh" />
-			<arg line="'${tmp.files.path}/${local.jobs.php.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.php.file.path}'" />
+			<arg
+				line="'${tmp.files.path}/${local.jobs.php.file.name}' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}/${local.php.file.path}'" />
 		</exec>
 
-		<delete file="${tmp.files.path}/${local.php.file.name}" failonerror="true" />
-		<delete file="${tmp.files.path}/${ldap.local.php.file.name}" failonerror="true" />
+		<delete file="${tmp.files.path}/${local.php.file.name}"
+			failonerror="true" />
+		<delete file="${tmp.files.path}/${ldap.local.php.file.name}"
+			failonerror="true" />
 
 	</target>
 
 	<target name="update_database">
 		<echo message="${remote.web.user}">
 		</echo>
-		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};./${doctrine.update.file})" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}"
+			keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};./${doctrine.update.file})" />
 
 	</target>
 	<target name="add_users">
-		<execute_sql_with_database dbname="${remote.db.dbname}" webhost="${remote.web.host}" webuser="${remote.web.user}" sqlfile="${remote.web.code.dir}/scripts/sql/minibus.user.sql" host="${remote.db.host}" user="${remote.db.user}" passwd="${remote.db.password}" />
+		<execute_sql_with_database dbname="${remote.db.dbname}"
+			webhost="${remote.web.host}" webuser="${remote.web.user}"
+			sqlfile="${remote.web.code.dir}/scripts/sql/minibus.user.sql" host="${remote.db.host}"
+			user="${remote.db.user}" passwd="${remote.db.password}" />
 
 	</target>
 	<target name="load_dependencies">
@@ -137,8 +164,12 @@
 		</exec>
 	</target>
 	<target name="change_permissions">
-		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir}; mkdir -pv data; chown -R www-data data;chmod -R g+w data;)" />
-		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(mkdir -pv ${remote.logs.dir}; mkdir -pv ${remote.data.dir};chown -R www-data ${remote.data.dir};chmod -R g+w ${remote.data.dir})" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}"
+			keyfile="~/.ssh/id_rsa"
+			command="(cd ${remote.web.code.dir}; mkdir -pv data; chown -R www-data data;chmod -R g+w data;)" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}"
+			keyfile="~/.ssh/id_rsa"
+			command="(mkdir -pv ${remote.logs.dir}; mkdir -pv ${remote.data.dir};chown -R www-data ${remote.data.dir};chmod -R g+w ${remote.data.dir})" />
 
 	</target>
 
