@@ -8,6 +8,20 @@
 			<property name="@{name}" value="${@{from}}" />
 		</sequential>
 	</macrodef>
+	<macrodef name="execute_sql_without_database">
+		<attribute name="webhost" />
+		<attribute name="webuser" />
+		<attribute name="sqlfile" />
+		<attribute name="host" />
+		<attribute name="user" />
+		<attribute name="passwd" />
+
+		<sequential>
+			<echo message="@{webhost} @{webuser} mysql -u @{user} -p@{passwd} &lt; @{sqlfile}">
+			</echo>
+			<sshexec trust="true" host="@{webhost}" username="@{webuser}" keyfile="~/.ssh/id_rsa" failonerror="true" command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile}" />
+		</sequential>
+	</macrodef>
 	<property name="script.dir" value="${basedir}/scripts">
 
 	</property>
@@ -36,6 +50,8 @@
 		</ant>
 		<antcall target="deploy_all_files">
 		</antcall>
+		<antcall target="create_database">
+		</antcall>
 		<antcall target="deploy_local_parameters">
 		</antcall>
 		<antcall target="generate_autoloader">
@@ -52,9 +68,27 @@
 	<target name="deploy_all_files">
 		<exec dir="." executable="rsync" failonerror="true">
 			<arg line="-av -e ssh --delete " />
+			<macrodef name="executer_sql_sans_base">
+				<attribute name="webhost" />
+				<attribute name="webuser" />
+				<attribute name="sqlfile" />
+				<attribute name="host" />
+				<attribute name="user" />
+				<attribute name="passwd" />
+
+				<sequential>
+					<echo message="@{webhost} @{webuser} mysql -u @{user} -p@{passwd} &lt; @{sqlfile}">
+					</echo>
+					<sshexec trust="true" host="@{webhost}" username="@{webuser}" keyfile="~/.ssh/id_rsa" failonerror="true" command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile}" />
+				</sequential>
+			</macrodef>
 			<arg line="--exclude-from='${script.dir}/exclusion_rsync.txt'" />
 			<arg line="'/${basedir}/' '${remote.web.user}@${remote.web.host}:${remote.web.code.dir}'" />
 		</exec>
+	</target>
+	<target name="create_database">
+		<execute_sql_without_database webhost="${remote.web.host}" webuser="${remote.web.user}" sqlfile="${remote.web.code.dir}/scripts/sql/create_db.sql" host="${remote.db.host}" user="${remote.db.user}" passwd="${remote.db.password}" />
+
 	</target>
 	<target name="deploy_local_parameters">
 		<copy overwrite="true" verbose="true" file="${local.minibus.php.template.file.name}" tofile="${tmp.files.path}/${local.minibus.php.file.name}" failonerror="true">
