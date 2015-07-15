@@ -12,6 +12,6 @@ data/*
 data/processlog
 .metadata
 .externalToolBuilders
-public
 !public/.htaccess
-!public/index.php
+public/**/*
+
