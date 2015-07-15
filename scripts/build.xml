@@ -22,6 +22,18 @@
 			<sshexec trust="true" host="@{webhost}" username="@{webuser}" keyfile="~/.ssh/id_rsa" failonerror="true" command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile}" />
 		</sequential>
 	</macrodef>
+	<macrodef name="execute_sql_with_database">
+		<attribute name="webhost" />
+		<attribute name="webuser" />
+		<attribute name="sqlfile" />
+		<attribute name="host" />
+		<attribute name="user" />
+		<attribute name="passwd" />
+		<attribute name="dbname" />
+		<sequential>
+			<sshexec trust="true" host="@{webhost}" username="@{webuser}" keyfile="~/.ssh/id_rsa" failonerror="true" command="mysql -u @{user} -p@{passwd} &lt; @{sqlfile} @{dbname}" />
+		</sequential>
+	</macrodef>
 	<property name="script.dir" value="${basedir}/scripts">
 
 	</property>
@@ -113,6 +125,10 @@
 		<echo message="${remote.web.user}">
 		</echo>
 		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};./${doctrine.update.file})" />
+
+	</target>
+	<target name="add_users">
+		<execute_sql_with_database dbname="${remote.db.dbname}" webhost="${remote.web.host}" webuser="${remote.web.user}" sqlfile="${remote.web.code.dir}/scripts/sql/minibus.user.sql" host="${remote.db.host}" user="${remote.db.user}" passwd="${remote.db.password}" />
 
 	</target>
 	<target name="load_dependencies">
