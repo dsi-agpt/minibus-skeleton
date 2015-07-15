@@ -12,7 +12,7 @@ $settings = array (
 		 * Please specify the DI alias for the configured Zend\Db\Adapter\Adapter
 		 * instance that ZfcUser should use.
 		 */
-		// 'zend_db_adapter' => 'Zend\Db\Adapter\Adapter',
+		 'zend_db_adapter' => 'Zend\Db\Adapter\Adapter',
 		
 		/**
 		 * User Model Entity Class
