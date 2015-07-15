@@ -14,4 +14,4 @@ data/processlog
 .externalToolBuilders
 public
 !public/.htaccess
-!public/.index.php
+!public/index.php
