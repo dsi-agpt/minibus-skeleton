@@ -121,8 +121,8 @@
 		</exec>
 	</target>
 	<target name="change_permissions">
-		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};chown -R www-data data;chmod -R g+w data;)" />
-		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(mkdir -pv ${remote.logs.dir};chown -R www-data ${remote.data.dir};chmod -R g+w ${remote.data.dir})" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir}; mkdir -pv data; chown -R www-data data;chmod -R g+w data;)" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(mkdir -pv ${remote.logs.dir}; mkdir -pv ${remote.data.dir};chown -R www-data ${remote.data.dir};chmod -R g+w ${remote.data.dir})" />
 
 	</target>
 
