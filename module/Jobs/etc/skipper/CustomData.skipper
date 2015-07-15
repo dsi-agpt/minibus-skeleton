@@ -2,7 +2,7 @@
 <skipper version="3.2.3.1247" mvc="Zend Framework" orm="Doctrine2" name="DataTransfer" uuid="c18f9d55-afc1-48d9-86e7-3feacc67ea4e">
   <module name="\Jobs" local-name="Jobs" namespace="\Jobs\Model\Entity" local-namespace="Jobs\Model\Entity" export-format="Doctrine2Php" export-path="../../src/Jobs/Model/Entity" uuid="6c891de7-63a5-4834-91c1-41a86c064004">
     <entity name="\Jobs\Model\Entity\User" local-name="User" namespace="\Jobs\Model\Entity" uuid="048a03e9-d52e-48a1-b4ba-8dca070fa78e">
-      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="5186ab0f-fc62-4aa9-a5ed-99ddc4de5503"/>
+      <field name="user_id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="5186ab0f-fc62-4aa9-a5ed-99ddc4de5503"/>
       <field name="username" type="string" size="150" uuid="e300a35e-a0da-425a-b60d-73435adee76d"/>
       <field name="email" type="string" size="150" uuid="ebd33727-b290-459b-830b-0a73357edcdc"/>
       <field name="displayname" type="string" size="150" uuid="86b651b7-fe4d-49bc-9107-d44d4b31d6a1"/>
@@ -12,13 +12,22 @@
         <attribute name="table">user</attribute>
       </orm-attributes>
     </entity>
+    <entity name="\Jobs\Model\Entity\Record" local-name="Record" namespace="\Jobs\Model\Entity" uuid="3a99e949-1c70-455a-898e-d31e5bc75709">
+      <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="59b9adf1-76e1-4330-b63b-db02edd47248"/>
+      <field name="title" type="string" size="250" required="true" uuid="25a90bdf-a5b4-4930-850e-cdb696368c19"/>
+      <field name="primary_artist" type="string" size="250" uuid="a561199f-dd85-47e8-a479-fc4a330e8463"/>
+      <field name="record_label" type="string" size="250" uuid="1046a9d0-97f6-48eb-ae01-61c2fe397ecb"/>
+      <field name="release_date" type="integer" size="8" uuid="4363864d-dc02-4d57-9818-8e11c67ae070"/>
+      <field name="product_id" type="integer" size="16" required="true" unique="true" uuid="22124f0e-40fe-492e-b465-b3221e7ea004"/>
+    </entity>
     <orm-attributes>
       <attribute name="file-suffix">without-suffix</attribute>
       <attribute name="filename-format">entity-name-only</attribute>
     </orm-attributes>
   </module>
   <visual-data>
-    <entity uuid="048a03e9-d52e-48a1-b4ba-8dca070fa78e" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="298" position-y="131" size-x="0" size-x2="143" size-y="0" size-y2="493"/>
+    <entity uuid="048a03e9-d52e-48a1-b4ba-8dca070fa78e" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="86" position-y="70" size-x="0" size-x2="126" size-y="0" size-y2="101"/>
+    <entity uuid="3a99e949-1c70-455a-898e-d31e5bc75709" bg-color="#FFFFFF" hdr-color="#D2D2D2" position-x="354" position-y="85" size-x="0" size-x2="20" size-y="0" size-y2="20"/>
     <module uuid="6c891de7-63a5-4834-91c1-41a86c064004" bg-color="#FDEBEF" position-x="50" position-y="50" size-x="0" size-x2="1874" size-y="0" size-y2="3646"/>
     <project uuid="c18f9d55-afc1-48d9-86e7-3feacc67ea4e" size-x="0" size-x2="3323" size-y="0" size-y2="4082"/>
   </visual-data>

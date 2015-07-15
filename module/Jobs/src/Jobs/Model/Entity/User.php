@@ -10,11 +10,17 @@ use ZfcUser\Entity\UserInterface;
  */
 class User implements UserInterface
 {
-
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer", name="user_id")
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $user_id;
+
+    /**
+     * 
+     * 
+     * 
      */
     private $id;
 
@@ -189,5 +195,15 @@ class User implements UserInterface
     public function getState()
     {
         return $this->state;
+    }
+
+    /**
+     * Get userId
+     *
+     * @return integer
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
     }
 }

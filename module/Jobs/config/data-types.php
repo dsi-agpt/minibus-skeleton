@@ -14,19 +14,21 @@ return array(
                             'datatable-formatter' => 'Jobs\Model\Browse\Formatters\Foo\Bar\DataTableFormatter',
                             'url' => 'rest/data/bar',
                             'columns' => array(
-                                'lastname' => 'Last Name',
-                                'firstname' => 'First Name'
+                                'title' => 'Title',
+                                'record_label' => 'Record label',
+                                'release_date' => 'Release date',
+                                'primary_artist' => 'Primary artist'
                             )
-                            
                         )
-                    ),
+                    )
+                    ,
                     'sources' => array(
-                        'dummyendpoint' => array(
+                        'dummy' => array(
                             'label' => 'Dummy Endpoint',
                             'control' => 'defaultProcessControl',
-                            'dataTransferAgent' => 'acquisition-bar-dummyendpoint',
+                            'dataTransferAgent' => 'acquisition-bar-dummy',
                             'locks' => array(
-                                Jobs\Controller\Exclusion\Locks::BAR => LOCK_EX
+                                Jobs\Controller\Exclusion\Locks::PRODUCTS => LOCK_EX
                             ),
                             'options' => array(
                                 'display_button' => array(
@@ -39,17 +41,17 @@ return array(
                         )
                     ),
                     'cibles' => array(
-                        'fakeendpoint' => array(
+                        'fake' => array(
                             'label' => 'FakeEndPoint',
                             'control' => 'defaultProcessControl',
-                            'dataTransferAgent' => 'export-bar-fakeendpoint',
+                            'dataTransferAgent' => 'export-bar-fake',
                             'locks' => array(
-                                Jobs\Controller\Exclusion\Locks::BAR => LOCK_SH
+                                Jobs\Controller\Exclusion\Locks::PRODUCTS => LOCK_SH
                             ),
                             'options' => array(
                                 'display_button' => array(
                                     'synchronize' => true,
-                                    'resync' => true,
+                                    'resync' => false,
                                     'control' => true,
                                     'stop' => true,
                                     'clear' => false

@@ -10,5 +10,5 @@ use Minibus\Controller\Exclusion\Locks as BaseLocks;
 class Locks extends BaseLocks
 {
 
-    const BAR = 'PERSONNES';
+    const PRODUCTS = 'PRODUCTS';
 }

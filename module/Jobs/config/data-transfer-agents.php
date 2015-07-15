@@ -1,12 +1,12 @@
 
 <?php
 return array(
-    'acquisition-bar-dummyendpoint' => array(
-        'class' => 'Jobs\Model\Process\DataTransfer\Acquisition\Foo\Bar\DummyEndpoint\TransferAgent',
-        'converter' => 'Jobs\Model\Process\DataTransfer\Acquisition\Foo\Bar\DummyEndpoint\Converter'
+    'acquisition-bar-dummy' => array(
+        'class' => 'Jobs\Model\Process\DataTransfer\Acquisition\Foo\Bar\Dummy\TransferAgent',
+        'converter' => 'Jobs\Model\Process\DataTransfer\Acquisition\Foo\Bar\Dummy\Converter'
     ),
-    'export-bar-fakeendpoint' => array(
-        'class' => 'Jobs\Model\Process\DataTransfer\Export\Foo\Bar\FakeEndpoint\TransferAgent',
-        'converter' => 'Jobs\Model\Process\DataTransfer\Export\Foo\Bar\FakeEndpoint\Converter'
+    'export-bar-fake' => array(
+        'class' => 'Jobs\Model\Process\DataTransfer\Export\Foo\Bar\Fake\TransferAgent',
+        'converter' => 'Jobs\Model\Process\DataTransfer\Export\Foo\Bar\Fake\Converter'
     )
 );
