@@ -9,7 +9,6 @@ nbproject
 .settings
 vendor/*
 data/*
-scripts/deploiement.properties
 data/processlog
 .metadata
 .externalToolBuilders
