@@ -15,7 +15,8 @@
 	</property>
 	<property name="local.pcl.file.path" value="scripts/pcl/ApresCandidature/config">
 	</property>
-
+	<property name="local.pcl.data.dir" value="/scripts/pcl/ApresCandidature/data">
+	</property>
 	<property name="local.jobs.php.file.name" value="jobs.local.php">
 	</property>
 	<property name="local.minibus.php.file.name" value="minibus.local.php">
@@ -162,7 +163,7 @@
 		</exec>
 	</target>
 	<target name="change_permissions">
-		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};chown -R www-data data;chmod -R g+w data;chmod -R o+w scripts/pcl/ApresCandidature/data;)" />
+		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(cd ${remote.web.code.dir};chown -R www-data data;chmod -R g+w data;chown www-data scripts/pcl/ApresCandidature/data;)" />
 		<sshexec host="${remote.web.host}" username="${remote.web.user}" keyfile="~/.ssh/id_rsa" command="(mkdir -pv ${remote.logs.dir};chown -R www-data ${remote.data.dir};chmod -R g+w ${remote.data.dir})" />
 
 	</target>
