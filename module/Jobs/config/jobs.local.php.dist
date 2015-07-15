@@ -3,7 +3,7 @@ return array(
     'data_endpoints' => array(
         'dummy' => array(
             'params' => array(
-                'url' => 'http://open.api.ebay.com/shopping?callname=FindProducts&QueryKeywords=piano&version=913&appid=my-own-ebay-developper-id&responseencoding=JSON& PageNumber=2& MaxEntries=100'
+                'url' => 'http://open.api.ebay.com/shopping?callname=FindProducts&QueryKeywords=piano&version=913&appid=%APP_ID%&responseencoding=JSON& PageNumber=2& MaxEntries=100'
             )
             
         ),

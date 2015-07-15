@@ -78,7 +78,7 @@
 		</antcall>
 		<antcall target="update_database">
 		</antcall>
-		<antcall target="add_users">		    
+		<antcall target="add_users">
 		</antcall>
 		<antcall target="change_permissions">
 		</antcall>
@@ -127,7 +127,7 @@
 			file="${local.jobs.php.template.file.name}" tofile="${tmp.files.path}/${local.jobs.php.file.name}"
 			failonerror="true">
 			<filterset begintoken="%" endtoken="%">
-				<filter token="FOO" value="foo" />
+				<filter token="APP_ID" value="${minibus.demo.app_id}" />
 
 			</filterset>
 		</copy>
