@@ -1,1 +1,1 @@
-DROP DATABASE `minibus`; CREATE DATABASE `minibus` CHARACTER SET utf8 COLLATE utf8_general_ci;
+DROP DATABASE IF EXISTS `minibus`; CREATE DATABASE `minibus` CHARACTER SET utf8 COLLATE utf8_general_ci;
