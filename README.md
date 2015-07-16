@@ -1,7 +1,6 @@
-Minibus skeleton&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Minibus logo](https://raw.githubusercontent.com/dsi-agpt/minibus/master/assets/img/minibus-logo.png)
+Minibus skeleton &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Minibus logo](https://raw.githubusercontent.com/dsi-agpt/minibus/master/assets/img/minibus-logo.png)
 ================
 
-* [Minibus skeleton(#minibus-skeleton)
   * [Presentation](#presentation)
     * [Demo](#demo)
     * [Features](#features)
