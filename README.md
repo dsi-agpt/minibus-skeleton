@@ -1,6 +1,24 @@
 Minibus skeleton&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Minibus logo](https://raw.githubusercontent.com/dsi-agpt/minibus/master/assets/img/minibus-logo.png)
 ================
 
+* [Minibus skeleton(#minibus-skeleton)
+  * [Presentation](#presentation)
+    * [Demo](#demo)
+    * [Features](#features)
+    * [Operating principle](#operating-principle)
+  * [Requirements](#requirements)
+  * [Technical instructions](#technical-instructions)
+    * [Application structure](#application-structure)
+    * [Local configuration](#local-configuration)
+    * [Data types](#data-types)
+    * [Endpoints configuration](#endpoints-configuration)
+    * [Zfc-User configuration](#zfc-user-configuration)
+    * [Minibus data transfer framework](#minibus-data-transfer-framework)
+      * [Data transfer execution engine](#data-transfer-execution-engine)
+      * [Creating a new data transfer](#creating-a-new-data-transfer)
+      * [Data transfer Api](#data-transfer-api)
+    * [Sheduling data transfer](#sheduling-data-transfer)
+
 
 
 #Presentation
@@ -231,7 +249,9 @@ return array (
 		'admin' => array ("my-new-route","another-new-route") 
 );
 ```
+
 ##Zfc-User configuration
+
 Minibus depends on zfc-user module for authentication features.
 In the minibus-skeleton configuration sample, Zend User is based on an internal user table. Though, no user management is provider. *scripts/sql/minibus.user.sql* provides 2 basic users for application startup.
 By default, nitecon/zfcuser-ldap is installed with Minibus. To enable ldap connexion :
