@@ -15,3 +15,5 @@ remote.db.dbname=minibus
 remote.data.dir=/opt/minibusdata
 
 remote.logs.dir=/opt/minibusdata/processlogs
+
+jquery.ui.theme=cupertino

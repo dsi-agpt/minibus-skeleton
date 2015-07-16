@@ -115,7 +115,7 @@
 				<filter token="MINIBUS_DB_DBNAME" value="${remote.db.dbname}" />
 				<filter token="DATA_DIRECTORY" value="${remote.data.dir}" />
 				<filter token="LOGS_DIRECTORY" value="${remote.logs.dir}" />
-
+				<filter token="JQUERY_UI_THEME" value="${jquery.ui.theme}" />
 			</filterset>
 		</copy>
 		<exec dir="." executable="rsync" failonerror="false">
