@@ -62,6 +62,8 @@
 	<property name="remote.classmap.generator.path"
 		value="${remote.web.code.dir}/vendor/zendframework/zendframework/bin/classmap_generator.php">
 	</property>
+	<property name="tmp.files.path" value="/tmp">
+	</property>
 	<target name="deploy">
 
 		<antcall target="load_dependencies">
@@ -105,8 +107,8 @@
 	</target>
 	<target name="deploy_local_parameters">
 		<copy overwrite="true" verbose="true"
-			file="${local.minibus.php.template.file.name}" tofile="${tmp.files.path}/${local.minibus.php.file.name}"
-			failonerror="true">
+	file="${local.minibus.php.template.file.name}" tofile="${tmp.files.path}/${local.minibus.php.file.name}"
+	failonerror="true">
 			<filterset begintoken="%" endtoken="%">
 				<filter token="MINIBUS_DB_HOST" value="${remote.db.host}" />
 				<filter token="MINIBUS_DB_PORT" value="${remote.db.port}" />
