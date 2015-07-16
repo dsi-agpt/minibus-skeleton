@@ -34,7 +34,7 @@ For now, dependence to mysql is avoidable, but minibus uses "enum" type in its i
 #Technical instructions
 
 ##Data types
-Data types hierachy is the core of your Minibus deployment.
+Data types hierachy (module/Jobs/config/data-types.php) is the core of your Minibus deployment. 
 ```php
 return array(
     //first level of data types, called, "Foo"
@@ -100,5 +100,45 @@ return array(
 );
 ```
 
+##Endpoints configuration
 
+For each endpoint listed in *data-types.php*, provide a configuration in *data-endpoints.php*.
+
+
+```php
+return array(
+    'dummy' => array(
+        'type' => \Minibus\Controller\Process\Service\Connection\EndpointConnectionBuilder::WEB_SERVICE_TYPE,
+        'params' => array()
+    ),
+    'fake' => array(
+        'type' => \Minibus\Controller\Process\Service\Connection\EndpointConnectionBuilder::DATABASE_TYPE,
+        'params' => array(
+            'driver' => 'mysql'
+        )
+    )
+);
+```
+Sensible or device-specific configuration information should be placed in autoload/jobs.local.php
+
+```php
+return array(
+    'data_endpoints' => array(
+        'dummy' => array(
+            'params' => array(
+                'url' => 'https://sensible information'
+            )
+            
+        ),
+        'fake' => array(
+            'params' => array(
+                'host' => 'myhost',
+                'port' => '1234',
+                'user' => 'myuser',
+                'password' => 'mypasswd',
+                'dbname' => 'mydb'
+            )
+        ),
+    )
+);
 
