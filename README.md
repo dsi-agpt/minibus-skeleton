@@ -1,6 +1,6 @@
 Minibus skeleton
 ================
-
+![Minibus logo](https://minibus.agroparistech.fr/img/minibus-logo.png)
 #Presentation
 
 Minibus skeleton is a sample implementation for Minibus application available [here](https://github.com/dsi-agpt/minibus). Minibus is a minimalist data bus written on top of Zend Framework 2 / Doctrine 2.
