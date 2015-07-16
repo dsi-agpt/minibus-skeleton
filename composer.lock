@@ -768,12 +768,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/dsi-agpt/minibus.git",
-                "reference": "8efe250e7416e1276ab770793d32ea5a941c80b7"
+                "reference": "2c12ad33d6bfdc836b4a20dac11105144faa5a8b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dsi-agpt/minibus/zipball/8efe250e7416e1276ab770793d32ea5a941c80b7",
-                "reference": "8efe250e7416e1276ab770793d32ea5a941c80b7",
+                "url": "https://api.github.com/repos/dsi-agpt/minibus/zipball/2c12ad33d6bfdc836b4a20dac11105144faa5a8b",
+                "reference": "2c12ad33d6bfdc836b4a20dac11105144faa5a8b",
                 "shasum": ""
             },
             "require": {
@@ -817,7 +817,7 @@
                 "bus",
                 "zf2"
             ],
-            "time": "2015-07-16 09:01:11"
+            "time": "2015-07-16 09:11:46"
         },
         {
             "name": "jms/metadata",
