@@ -33,6 +33,81 @@ For now, dependence to mysql is avoidable, but minibus uses "enum" type in its i
 
 #Technical instructions
 
+##Local configuration
+After retrieving all dependencies via composer, copy minibus local configuration file vendor/dsi-agpt/minibus/config/minibus.local.php.dist to your autoload directory and remove .dist extension.
+
+This file must be carefully fulfilled. Edit parts marked by %% symbols. It allows Doctrine Tools to generate database schema for 2 entity directories : that of Minibus itself and that of you Data transfer process.
+Pay attention to *data-store-directory* and *process-log-directory* : you will have to allow write access for apache user or group (www-data).
+
+```php
+$dbParams = array(
+    'host' => '%MINIBUS_DB_HOST%',
+    'port' => '%MINIBUS_DB_PORT%',
+    'user' => '%MINIBUS_DB_USER%',
+    'password' => '%MINIBUS_DB_PASSWORD%',
+    'dbname' => '%MINIBUS_DB_DBNAME%',
+    'driver' => 'pdo_mysql',
+    'mapping_types' => "enum: string",
+    'charset' => 'utf8',
+    'driverOptions' => array(
+        1002 => 'SET NAMES utf8'
+    )
+);
+return array(
+    'doctrine' => array(
+        'connection' => array(
+            'orm_default' => array(
+                'params' => $dbParams
+            )
+        ),
+        'driver' => array(
+            // defines an annotation driver with two paths
+            'minibus_annotation_driver' => array(
+                'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
+                'cache' => 'array',
+                'paths' => array(
+                    __DIR__ . '/../vendor/dsi-agpt/minibus/src/Minibus/Model/Entity',
+                    __DIR__ . '/../../../module/Jobs/src/Jobs/Model/Entity'
+                )
+            ),
+            
+            // default metadata driver, aggregates all other drivers into a single one.
+            // Override `orm_default` only if you know what you're doing
+            'orm_default' => array(
+                'drivers' => array(
+                    // register `my_annotation_driver` for any entity under namespace `My\Namespace`
+                    'Minibus' => 'minibus_annotation_driver',
+                    'Jobs' => 'minibus_annotation_driver'
+                )
+            )
+        )
+    ),
+    'enable_rest_client_ssl_verification' => false,
+   	'data-store-directory' => '%DATA_DIRECTORY%' ,
+	'process-log-directory' => '%LOGS_DIRECTORY%' ,
+    'number-of-executions-to-keep' => 5,
+    'jquery-ui-theme' => '%JQUERY_UI_THEME%',
+    'auth' => array(
+        'filePath' => __DIR__ . "/users.txt"
+    ),
+    'service_manager' => array(
+        'factories' => array(
+            'Zend\Db\Adapter\Adapter' => function ($sm) use($dbParams)
+            {
+                return new Zend\Db\Adapter\Adapter(array(
+                    'driver' => 'pdo',
+                    'dsn' => 'mysql:host=' . $dbParams['host'] . ';port=' . $dbParams['port'] . ';dbname=' . $dbParams['dbname'] . ';user=' . $dbParams['user'] . ';password=' . $dbParams['password'],
+                    'database' => $dbParams['dbname'],
+                    'username' => $dbParams['user'],
+                    'password' => $dbParams['password'],
+                    'hostname' => $dbParams['host']
+                ));
+            }
+        )
+    )
+);
+```
+
 ##Data types
 Data types hierachy (module/Jobs/config/data-types.php) is the core of your Minibus deployment. 
 ```php
