@@ -15,13 +15,22 @@ A single type of data ("Foo/Bar") is exposed with two data transfer
 
 Currently, Minibus provides the following functionnalities :
 * Process execution and monitoring from graphical interface
+* Process sheduling
 * Alerts handling
-* Data display
+* Data display with full text seach
 
 ##Operating principle
 
-Define your (possibly hierarchical) types of data. For each type of data, implement one or mor **acquisition process**.
-Acquisition process will connect to remote endpoint (possibly internal to you information system), fetch and convert data to your reference model. 
+Define your (possibly hierarchical) types of data. For each type of data, implement one or more **acquisition process**.
+Acquisition process will connect to a remote endpoint (possibly internal to you information system), fetch and convert data to your reference model.  Then, implement one or more **export process** that will convert data and write it into your target applications.
+
+#Requirements
+
+Minibus requires apache 2.x with mod rewrite, mysql, PHP>=5.4, mysql, php5-curl, php5-intl, php5-mysql.
+For now, dependence to mysql is avoidable, but minibus uses "enum" type in its internal data model. Your RDBMS implementation must support this fonctionnality.
+
+#Technical instructions
+
 
 
 
