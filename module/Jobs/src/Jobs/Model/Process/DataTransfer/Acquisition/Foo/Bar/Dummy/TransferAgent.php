@@ -180,7 +180,7 @@ class TransferAgent extends AbstractDataAcquisitionAgent
                         $this->setAlive(true);
                     }
                 } else {
-                    $message = sprintf("Web service sent an error response with message : %s", $ebayResponse['Errors'][0]['LongMessage']);
+                    $message = sprintf("Web service sent an error response with message : %s", isset($ebayResponse['Errors'][0]['LongMessage']) ? $ebayResponse['Errors'][0]['LongMessage'] : 'Unknown');
                     $this->getLogger()->err($message);
                     $this->alertError($message);
                     $this->setAlive(false);
