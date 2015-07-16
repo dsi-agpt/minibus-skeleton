@@ -1,4 +1,4 @@
-Minibus skeleton ![Minibus logo](https://raw.githubusercontent.com/dsi-agpt/minibus/master/assets/img/minibus-logo.png)
+Minibus skeleton                                                            ![Minibus logo](https://raw.githubusercontent.com/dsi-agpt/minibus/master/assets/img/minibus-logo.png)
 ================
 
 
