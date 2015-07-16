@@ -11,6 +11,8 @@ class TransferAgent extends AbstractDataAcquisitionAgent
 
     private $converter;
 
+    private $client;
+
     private function launchConversionErrors()
     {
         if (! $this->converter->hasErrors())
@@ -73,113 +75,126 @@ class TransferAgent extends AbstractDataAcquisitionAgent
         $this->setAlive(false);
     }
 
+    private function getResultPage($pageNumber)
+    {
+        $this->getLogger()->info("Asking page number $pageNumber");
+        $ebayResponse = $this->client->get("", array(
+            "PageNumber" => $pageNumber
+        ));
+        return $ebayResponse;
+    }
+
     public function runSync()
     {
-        $this->getLogger()->info("Begin of process : look for clarinets for sale");
+        $this->getLogger()->info("Begin of process : look for pianos for sale");
         
         $this->setAlive(true);
         $this->converter = $this->getConverter();
-        $client = $this->getEndPointConnection();
+        $this->client = $this->getEndPointConnection();
         $this->getLogger()->info("Call ws");
-        $clarinets = $client->get("");
-        $response = $client->getLastResponse();
-        $success = true;
-        if ($response->isSuccess()) {
-            $ack = isset($clarinets['Ack']) ? $clarinets['Ack'] : "Failure";
-            if ($ack == "Success") {
-                $products = $clarinets['Product'];
-                foreach ($products as $product) {
-                    $domainName = array_key_exists('DomainName', $product) ? $product['DomainName'] : "no-category";
-                    if ($domainName != 'Music: CDs') {
-                        $message = sprintf("We are not intersted in products of category %s", $domainName);
-                        $this->getLogger()->warn($message);
-                        $this->alertWarn($message);
-                        continue;
-                    }
-                    
-                    $productId = null;
-                    if (isset($product['ProductID'])) {
-                        $productIds = $product['ProductID'];
-                        if (is_array($productIds)) {
-                            foreach ($productIds as $entry) {
-                                if (isset($entry["Type"]) && $entry["Type"] == "Reference" && isset($entry["Value"]))
-                                    $productId = $entry["Value"];
+        $counter = 1;
+        do {
+            $ebayResponse = $this->getResultPage($counter);
+            $response = $this->client->getLastResponse();
+            $success = true;
+            $continue = isset($ebayResponse['MoreResults']) && $ebayResponse['MoreResults'] == 'true';
+            $counter += rand(1, 30);
+            if ($response->isSuccess()) {
+                $ack = isset($ebayResponse['Ack']) ? $ebayResponse['Ack'] : "Failure";
+                if ($ack == "Success") {
+                    $products = $ebayResponse['Product'];
+                    foreach ($products as $product) {
+                        $domainName = array_key_exists('DomainName', $product) ? $product['DomainName'] : "no-category";
+                        if ($domainName != 'Music: CDs') {
+                            $message = sprintf("We are not intersted in products of category %s", $domainName);
+                            $this->getLogger()->warn($message);
+                            $this->alertWarn($message);
+                            continue;
+                        }
+                        
+                        $productId = null;
+                        if (isset($product['ProductID'])) {
+                            $productIds = $product['ProductID'];
+                            if (is_array($productIds)) {
+                                foreach ($productIds as $entry) {
+                                    if (isset($entry["Type"]) && $entry["Type"] == "Reference" && isset($entry["Value"]))
+                                        $productId = $entry["Value"];
+                                }
                             }
                         }
-                    }
-                    if (empty($productId)) {
-                        $this->logWarn("This product has no productId.");
-                        $this->alertWarn("Ther is a product without productId, unable to register it.");
-                        continue;
-                    }
-                    $title = array_key_exists('Title', $product) ? $product['Title'] : "";
-                    if (empty($title)) {
-                        $message = sprintf("The product with id %s has no title , unable to register it", $productId);
-                        $this->logWarn($message);
-                        $this->alertWarn($message);
-                        continue;
-                    }
-                    $primaryArtist = "no-artist";
-                    $recordLabel = "no-label";
-                    $releaseDate = "no-date";
-                    if (isset($product['ItemSpecifics']['NameValueList'])) {
-                        $nameValueList = $product['ItemSpecifics']['NameValueList'];
-                        if (is_array($nameValueList)) {
-                            foreach ($nameValueList as $entry) {
-                                if (isset($entry["Name"]) && $entry["Name"] == "Primary Artist" && isset($entry["Value"]) && is_array($entry["Value"]))
-                                    $primaryArtist = $entry["Value"][0];
-                                if (isset($entry["Name"]) && $entry["Name"] == "Record Label" && isset($entry["Value"]) && is_array($entry["Value"]))
-                                    $recordLabel = $entry["Value"][0];
-                                if (isset($entry["Name"]) && $entry["Name"] == "Release Date" && isset($entry["Value"]) && is_array($entry["Value"]))
-                                    $releaseDate = $entry["Value"][0];
+                        if (empty($productId)) {
+                            $this->logWarn("This product has no productId.");
+                            $this->alertWarn("Ther is a product without productId, unable to register it.");
+                            continue;
+                        }
+                        $title = array_key_exists('Title', $product) ? $product['Title'] : "";
+                        if (empty($title)) {
+                            $message = sprintf("The product with id %s has no title , unable to register it", $productId);
+                            $this->logWarn($message);
+                            $this->alertWarn($message);
+                            continue;
+                        }
+                        $primaryArtist = "no-artist";
+                        $recordLabel = "no-label";
+                        $releaseDate = "no-date";
+                        if (isset($product['ItemSpecifics']['NameValueList'])) {
+                            $nameValueList = $product['ItemSpecifics']['NameValueList'];
+                            if (is_array($nameValueList)) {
+                                foreach ($nameValueList as $entry) {
+                                    if (isset($entry["Name"]) && $entry["Name"] == "Primary Artist" && isset($entry["Value"]) && is_array($entry["Value"]))
+                                        $primaryArtist = $entry["Value"][0];
+                                    if (isset($entry["Name"]) && $entry["Name"] == "Record Label" && isset($entry["Value"]) && is_array($entry["Value"]))
+                                        $recordLabel = $entry["Value"][0];
+                                    if (isset($entry["Name"]) && $entry["Name"] == "Release Date" && isset($entry["Value"]) && is_array($entry["Value"]))
+                                        $releaseDate = $entry["Value"][0];
+                                }
                             }
                         }
+                        
+                        $record = $this->getEntityManager()
+                            ->getRepository("Jobs\Model\Entity\Record")
+                            ->findOneBy(array(
+                            "product_id" => $productId
+                        ));
+                        if (! is_null($record))
+                            $message = sprintf("Product with id %s yet registered in database", $productId);
+                        else {
+                            $record = new Record();
+                            $message = sprintf("Product with id %s not yet registered in database, creating new one", $productId);
+                        }
+                        $this->logInfo($message);
+                        $record->setTitle($title);
+                        $record->setRecordLabel($recordLabel);
+                        $record->setReleaseDate($releaseDate);
+                        $record->setPrimaryArtist($primaryArtist);
+                        $record->setProductId($productId);
+                        try {
+                            $this->getEntityManager()->persist($record);
+                            $this->getEntityManager()->flush($record);
+                        } catch (\Exception $e) {
+                            $message = sprintf("Impossible to save one of the records with message %s", $e->getMessage());
+                            $this->logError($message);
+                            $this->setAlive(false);
+                            return;
+                        }
+                        $this->setAlive(true);
                     }
-                    
-                    $record = $this->getEntityManager()
-                        ->getRepository("Jobs\Model\Entity\Record")
-                        ->findOneBy(array(
-                        "product_id" => $productId
-                    ));
-                    if (! is_null($record))
-                        $message = sprintf("Product with id %s yet registered in database", $productId);
-                    else {
-                        $record = new Record();
-                        $message = sprintf("Product with id %s not yet registered in database, creating new one", $productId);
-                    }
-                    $this->logInfo($message);
-                    $record->setTitle($title);
-                    $record->setRecordLabel($recordLabel);
-                    $record->setReleaseDate($releaseDate);
-                    $record->setPrimaryArtist($primaryArtist);
-                    $record->setProductId($productId);
-                    try {
-                        $this->getEntityManager()->persist($record);
-                        $this->getEntityManager()->flush($record);
-                    } catch (\Exception $e) {
-                        $message = sprintf("Impossible to save one of the records with message %s", $e->getMessage());
-                        $this->logError($message);
-                        $this->setAlive(false);
-                        return;
-                    }
-                    $this->setAlive(true);
-                    sleep(0.5);
+                } else {
+                    $message = sprintf("Web service sent an error response with message : %s", $ebayResponse['Errors'][0]['LongMessage']);
+                    $this->getLogger()->err($message);
+                    $this->alertError($message);
+                    $this->setAlive(false);
+                    return;
                 }
             } else {
-                $message = sprintf("Web service sent an error response with message : %s", $clarinets['Errors'][0]['LongMessage']);
+                $code = $this->client->getLastResponse()->getStatusCode();
+                $message = sprintf("Impossible to connect to REST json web service with HTTP code %s", $code);
                 $this->getLogger()->err($message);
                 $this->alertError($message);
                 $this->setAlive(false);
                 return;
             }
-        } else {
-            $code = $client->getLastResponse()->getStatusCode();
-            $message = sprintf("Impossible to connect to REST json web service with HTTP code %s", $code);
-            $this->getLogger()->err($message);
-            $this->alertError($message);
-            $this->setAlive(false);
-            return;
-        }
+        } while (true === $continue);
         
         $this->getLogger()->info("End of process");
         
