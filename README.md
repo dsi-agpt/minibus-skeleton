@@ -35,6 +35,16 @@ For now, dependence to mysql is avoidable, but minibus uses "enum" type in its i
 
 #Technical instructions
 
+##Application structure
+
+In the sample deployment proposed here, the main module called Jobs is where you create and configure your data transfer. The data transfer runtime engine is provided by the Minibus module [available on Packagist] (https://packagist.org/packages/dsi-agpt/minibus)
+
+For complex or unusual data manipulations, you can implement your own controllers, services or helpers like in any ZF2 application.
+The directory Jobs\Model\ Entity is expected to host the entities forming your specific data model. Two scripts are provided to launch the Doctrine tools, taking into account the local application configuration:
+
+* scripts/doctrine-tools-update.sh for database schema forward generation
+* scripts/doctrine-tools-geters-setters.sh for automatic getters/setters generation in entity classes
+
 ##Local configuration
 After retrieving all dependencies via composer, copy minibus local configuration file vendor/dsi-agpt/minibus/config/minibus.local.php.dist to your autoload directory and remove .dist extension.
 
