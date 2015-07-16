@@ -55,11 +55,7 @@ $dbParams = array(
 );
 return array(
     'doctrine' => array(
-        'connection' => array(
-            'orm_default' => array(
-                'params' => $dbParams
-            )
-        ),
+       /...
         'driver' => array(
             // defines an annotation driver with two paths
             'minibus_annotation_driver' => array(
@@ -83,28 +79,15 @@ return array(
         )
     ),
     'enable_rest_client_ssl_verification' => false,
-   	'data-store-directory' => '%DATA_DIRECTORY%' ,
-	'process-log-directory' => '%LOGS_DIRECTORY%' ,
+    'data-store-directory' => '%DATA_DIRECTORY%' ,
+    'process-log-directory' => '%LOGS_DIRECTORY%' ,
     'number-of-executions-to-keep' => 5,
+    //choose among google cdn host themes : for example, 'smoothness' (http://blog.jqueryui.com for complete list)
     'jquery-ui-theme' => '%JQUERY_UI_THEME%',
     'auth' => array(
         'filePath' => __DIR__ . "/users.txt"
     ),
-    'service_manager' => array(
-        'factories' => array(
-            'Zend\Db\Adapter\Adapter' => function ($sm) use($dbParams)
-            {
-                return new Zend\Db\Adapter\Adapter(array(
-                    'driver' => 'pdo',
-                    'dsn' => 'mysql:host=' . $dbParams['host'] . ';port=' . $dbParams['port'] . ';dbname=' . $dbParams['dbname'] . ';user=' . $dbParams['user'] . ';password=' . $dbParams['password'],
-                    'database' => $dbParams['dbname'],
-                    'username' => $dbParams['user'],
-                    'password' => $dbParams['password'],
-                    'hostname' => $dbParams['host']
-                ));
-            }
-        )
-    )
+    //...
 );
 ```
 
@@ -217,3 +200,4 @@ return array(
     )
 );
 
+##Access control lists
