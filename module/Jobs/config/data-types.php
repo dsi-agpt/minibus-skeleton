@@ -20,11 +20,11 @@ return array(
                                 'primary_artist' => 'Primary artist'
                             )
                         )
-                    )
-                    ,
+                    ),
                     'sources' => array(
                         'dummy' => array(
                             'label' => 'Dummy Endpoint',
+                            'process-description' => 'This process retrieves products containing word "piano" on ebay API and rejects those non belonging to Music/CD category',
                             'control' => 'defaultProcessControl',
                             'dataTransferAgent' => 'acquisition-bar-dummy',
                             'locks' => array(
@@ -43,6 +43,8 @@ return array(
                     'cibles' => array(
                         'fake' => array(
                             'label' => 'FakeEndPoint',
+                            'process-description' => 'This process is not implemented, it is placed here as an illustration of how Minibus handles errors. ',
+                            
                             'control' => 'defaultProcessControl',
                             'dataTransferAgent' => 'export-bar-fake',
                             'locks' => array(
