@@ -40,7 +40,7 @@ return array(
                             )
                         )
                     ),
-                    'cibles' => array(
+                    'targets' => array(
                         'fake' => array(
                             'label' => 'FakeEndPoint',
                             'process-description' => 'This process is not implemented, it is placed here as an illustration of how Minibus handles errors. ',
