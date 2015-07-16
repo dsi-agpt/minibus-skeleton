@@ -233,7 +233,7 @@ return array (
 ```
 ##Zfc-User configuration
 Minibus depends on zfc-user module for authentication features.
-In the minibus-skeleton configuration sample, Zend User is based on an internal user table. Though, no user management is provider. *scripts/sql/minibus.user.sql* provides tw basic users for application startup.
+In the minibus-skeleton configuration sample, Zend User is based on an internal user table. Though, no user management is provider. *scripts/sql/minibus.user.sql* provides 2 basic users for application startup.
 By default, nitecon/zfcuser-ldap is installed with Minibus. To enable ldap connexion :
 
 * Enable 'ZfcUserLdap' in application.config.php
@@ -276,6 +276,10 @@ return array (
 
 Minibus provides a lightweight data transfer framework that aims to simplify the writing of data transfers by supporting the plumbing and optimizing the error return.
 
+###Data transfer execution engine 
+
 ###Creating a new data transfer
 
+###Data transfer Api
 
+##Sheduling data transfer
