@@ -1,7 +1,7 @@
-Minibus skeleton
+Minibus skeleton ![Minibus logo](https://raw.githubusercontent.com/dsi-agpt/minibus/master/assets/img/minibus-logo.png)
 ================
 
-![Minibus logo](https://minibus.agroparistech.fr/img/minibus-logo.png)
+
 
 #Presentation
 
