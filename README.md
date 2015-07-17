@@ -52,7 +52,7 @@ Currently, Minibus provides the following functionnalities :
 
 ##The big picture
 
-Define your (possibly hierarchical) types of data. Create doctrine entities representative of the common data model for applications of the information system. For each type of data, implement one or more **acquisition process**.
+Define your (possibly classified by domains) types of data. Create doctrine entities representative of the common data model for applications of the information system. For each type of data, implement one or more **acquisition process**.
 Acquisition process will connect to a remote endpoint (possibly internal to you information system), fetch and convert data to your reference model.  Then, implement one or more **export process** that will convert data and write it into your target applications.
 
 #Requirements
