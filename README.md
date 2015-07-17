@@ -406,7 +406,46 @@ By extending the abstract TransferAgent class, you have access to several conven
 
 ####Logging 
 
+The dataTransfer is equipped with a logger (Zend\Log\Logger) related to a particular file attached to an execution. The logs are delivered in real time into Minibus web interface.
 
+```php
+$this->getLogger()->info("Sample information");
+```
+Note that as long as a data transfer is running, its logger can be called in a static way : it exempts you from passing a reference to the logger to all secondary classes that you will develop.
+
+```php
+Jobs\Model\Process\DataTransfer\Acquisition\Students\RegistrationSystem\TransferAgent::logError(...);
+```
+
+####Alerts
+
+The facts that deserve to be brought to the knowledge of the dministrators can be subject to alerts with 3 severity levels.
+Then, they can be displayed and filtered under the "Alerts" tab of the web interface.
+
+```php
+$this->alertWarn($message);
+$this->alertError($message);
+$this->alertAlert($message);
+```
+As with logs, alerts can be called in static mode by other classes.
+
+If an object identifier is passed along with the alert message, object concerned by an alert can be listed and skipped during the next execution of the data transfer. It's accessible as the protected field *$idObjectsAlertList*.
+
+####Keep me alive
+
+Calling the setAlive method on a regular basis is mandatory for the DataTransfer. Typically, this has to be done inside the main loop.
+```php
+ $this->setAlive(true);
+```
+Conversely, when its execution is complete, the dataTransfer must report it.
+```php
+ $this->setAlive(false);
+```
+To stop execution prematurely, simply place a return statement.
+```php
+ $this->setAlive(false);
+ return;
+```
 ##Sheduling data transfer
 
 It's not enough to click on the checkboxes in the acquisition and export interfaces. An executor is to be launched every minute to update the status of data transfers, determine which ones are mature candidates for execution and launch one of them. 
