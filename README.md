@@ -9,6 +9,8 @@ Minibus skeleton &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 * [Technical instructions](#technical-instructions)
   * [Requirements](#requirements)
   * [Application structure](#application-structure)
+      * [Database schema generation](#database-schema-generation)
+      * [Assets deployment and less compilation](#assets-deployment-and-less-compilation)
   * [Local configuration](#local-configuration)
   * [Data types](#data-types)
   * [Endpoints configuration](#endpoints-configuration)
@@ -31,13 +33,13 @@ Minibus skeleton &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 
 Minibus skeleton is a sample implementation for Minibus application available on [Github](https://github.com/dsi-agpt/minibus) and [Packagist](https://packagist.org/packages/dsi-agpt/minibus). Minibus is a minimalist data bus written on top of Zend Framework 2 / Doctrine 2.
 It provides a framework to write data transfer scripts and a GUI to manage them.
-Minibus is intended for people who prefer coding data transfers in object oriented language rather than designing them via a graphic interface as that provided by ETL tools. The main interest of Minibus, for an organization that already uses Zend and Doctrine in its projects, is to train its teams on these technologies instead of dispersing the skills to other tools such as ETL or Bus. Coding data transfers can be a good way to acclimate newcomers to this framework.
-Don't use Minibus if your transfers involve very large amounts of data or if you have important performance requirements. Indeed, Zend and the ORM layer will be detrimental with respect to the consumption of RAM and the execution time.
+Minibus is intended for people who prefer devellop data transfers with their usual framework rather than design them via a graphical interface. The main interest of Minibus, for an organization that already uses Zend and Doctrine in its projects, is to train its teams on these technologies instead of dispersing the skills to other tools such as ETL or Bus. Coding data transfers can be a good way to acclimate newcomers to this framework.
+Don't use Minibus if your transfers involve very large amounts of data or if you have important performance requirements. Indeed, Zend and the ORM layer will be detrimental with respect to the consumption of memory and the execution time.
 
 ##Demo
 
 A fake deployment is available [here](https://minibus.agroparistech.fr). You can connect as **admin** (password **admintest**) to access all the functionalities or as **guest** (password **guesttest**) for restricted access.
-A single type of data ("Foo/Bar") is exposed with two data transfer
+A single type of data ("Foo/Bar") is exposed with two data transfer process.
 
 ##Screenshots
 
@@ -67,7 +69,7 @@ Acquisition process will connect to a remote endpoint (possibly internal to you 
 
 ##Requirements
 
-Minibus requires apache 2.x with mod rewrite, mysql, PHP>=5.4, mysql, php5-curl (if you wish to enable rest client), php5-intl, php5-ssh2 (for Scp endpoints), php5-mysql.
+Minibus requires apache 2.x with mod rewrite, mysql, PHP>=5.4, mysql, php5-intl, php5-ssh2 (for Scp endpoints), php5-curl (if you wish to enable rest client), php5-mysql.
 For now, dependence to mysql is avoidable, but minibus uses "enum" type in its internal data model. Your RDBMS implementation must support this feature.
 
 ##Application structure
@@ -75,16 +77,22 @@ For now, dependence to mysql is avoidable, but minibus uses "enum" type in its i
 In the sample deployment proposed here, the main module called Jobs is where you create and configure your data transfer. The data transfer runtime engine is provided by the Minibus module [available on Packagist] (https://packagist.org/packages/dsi-agpt/minibus)
 
 For complex or unusual data manipulations, you can implement your own controllers, services or helpers like in any ZF2 application.
-The directory Jobs\Model\ Entity is expected to host the entities forming your specific data model. Two scripts are provided to launch the Doctrine tools, taking into account the local application configuration:
+
+###Database schema generation
+The directory Jobs\Model\Entity is expected to host the entities forming your specific data model. Two scripts are provided to launch the Doctrine tools, taking into account the local application configuration:
 
 * scripts/doctrine-tools-update.sh for database schema forward generation
 * scripts/doctrine-tools-geters-setters.sh for automatic getters/setters generation in entity classes
+
+###Assets deployment and less compilation
+Minibus does not use Assetic as asset manager. The two involved modules (Jobs and Minibus) have their own assets directoring containing all the static resources required for a proper display. Css files are not provided, stylesheets have to be compiled with less.
+To make the whole process simpler, run the ant file "scripts/build_assets.xml" provided in the skeleton.
 
 ##Local configuration
 
 After retrieving all dependencies via composer, copy minibus local configuration file vendor/dsi-agpt/minibus/config/minibus.local.php.dist to your autoload directory and remove .dist extension.
 
-This file must be carefully fulfilled. Edit parts marked by %% symbols. It allows Doctrine Tools to generate database schema for 2 entity directories : that of Minibus itself and that of you Data transfer process.
+This file must be carefully fulfilled. Edit parts marked by %% symbols. It allows Doctrine Tools to generate database schema for 2 entity directories : that of Minibus itself and that of you data transfer process.
 Pay attention to *data-store-directory* and *process-log-directory* : you will have to allow write access for apache user or group (www-data).
 
 ```php
@@ -114,12 +122,8 @@ return array(
                     __DIR__ . '/../../../module/Jobs/src/Jobs/Model/Entity'
                 )
             ),
-            
-            // default metadata driver, aggregates all other drivers into a single one.
-            // Override `orm_default` only if you know what you're doing
             'orm_default' => array(
                 'drivers' => array(
-                    // register `my_annotation_driver` for any entity under namespace `My\Namespace`
                     'Minibus' => 'minibus_annotation_driver',
                     'Jobs' => 'minibus_annotation_driver'
                 )
@@ -131,7 +135,8 @@ return array(
     'data-store-directory' => '%DATA_DIRECTORY%' ,
     'process-log-directory' => '%LOGS_DIRECTORY%' ,
     'number-of-executions-to-keep' => 5,
-    //choose among google cdn host themes : for example, 'smoothness' (http://blog.jqueryui.com for complete list)
+    //choose among google cdn host themes : for example, 'smoothness'
+    //see http://blog.jqueryui.com for complete list
     'jquery-ui-theme' => '%JQUERY_UI_THEME%',
     //acl configuration file
     'auth' => array(
@@ -237,8 +242,7 @@ return array(
         'dummy' => array(
             'params' => array(
                 'url' => 'https://sensible information'
-            )
-            
+            )         
         ),
         'fake' => array(
             'params' => array(
@@ -255,14 +259,14 @@ return array(
 
 ##Access control lists
 
-Considering the small number of users typically authorized in such applications, Minibus offers a rudimentary ACL system, based on a file and two roles. Provide a file designed as follows and specify its path in minibus local configuration file:
+Considering the small number of users typically authorized in such applications, Minibus offers a rudimentary ACL system, based on a file and two roles. Create a permissions file designed as follows and specify its path in minibus local configuration :
 
 ```
 alice=admin
 bob=guest
 ```
 
-In case you would add new routes to the application via your Jobs module, allow  admin and/or guest role to use them in /minibus-skeleton/module/Jobs/config/acl-roles-config.php
+In case you would add new routes to the application via the Jobs module, allow  *admin* and/or *guest* role to use them in */minibus-skeleton/module/Jobs/config/acl-roles-config.php*
 
 ```php
 return array (
@@ -342,7 +346,7 @@ If *setAlive* is never called, this will not happen, but the process will be cle
 
 ###Creating a new data transfer
 
-1. Create a new class extending one of the *Minibus\Model\Process\DataTransfer\Acquisition\AbstractDataAcquisitionAgent*, *Minibus\Model\Process\DataTransfer\Acquisition\AbstractDataExportAgent* : for exemple, for the acquisition of students coming from ApplySystem application :
+1. Create a new class extending one of the *Minibus\Model\Process\DataTransfer\Acquisition\AbstractDataAcquisitionAgent*, *Minibus\Model\Process\DataTransfer\Acquisition\AbstractDataExportAgent* and implement the *run* method : for exemple, for the acquisition of students coming from ApplySystem application :
 
 ```php
 <?php
@@ -360,8 +364,10 @@ Then, register your TransferAgent in *module/Jobs/config/data-transfer-agents.ph
     ),
 ```
 Please pay attention to naming conventions used by minibus.
-If your data transfer is an acquisition process, if the transferred data are students and that the source is registrationsytem, the key must be *acquisition-students-registrationsytem*.
-Inside the application a process is always identified by the key registrationsytem mode-datatype-endpoint-year. For non-annualized process, year is set to 0.
+
+If your data transfer is an *acquisition* process, if the transferred data are *students* and the source is *registrationsytem*, the key must be *acquisition-students-registrationsytem*.
+Inside the application a process is always identified by the key mode-datatype-endpoint-year. For non-annualized process, year is set to 0. For exemple, *acquisition-students-registrationsytem-0*. For annualized process, *acquisition-students-registrationsytem-2016* is not the same process as *acquisition-students-registrationsytem-2017*.
+
 You still have to mention that data transfer in one of the *source* (for acquisition) or *target* (for export) entries of your data type configuration file.
 
 ```php
@@ -394,6 +400,7 @@ You still have to mention that data transfer in one of the *source* (for acquisi
                 ),
             ),
 ```
+
 It's Minibus that will take care of initializing the connexion to the endpoint and inject it into the data transfer. The source (here *registrationsytems*) must be configured in *module/Jobs/config/data-endpoints.php*.
 
 ```php
@@ -426,8 +433,7 @@ Jobs\Model\Process\DataTransfer\Acquisition\Students\RegistrationSystem\Transfer
 
 ####Alerts
 
-The facts that deserve to be brought to the knowledge of the dministrators can be subject to alerts with 3 severity levels.
-Then, they can be displayed and filtered under the "Alerts" tab of the web interface.
+The facts that deserve to be brought to the knowledge of administrators can be subject to alerts with 3 severity levels. Then, they will be displayed and filtered under the "Alerts" tab of the web interface.
 
 ```php
 $this->alertWarn($message);
@@ -436,11 +442,12 @@ $this->alertAlert($message);
 ```
 As with logs, alerts can be called in static mode by other classes.
 
-If an object identifier is passed along with the alert message, object concerned by an alert can be listed and skipped during the next execution of the data transfer. It's accessible as the protected field *$idObjectsAlertList*.
+If an object identifier is passed along with the alert message, object concerned by an alert can be listed and skipped during the next execution of the data transfer. The list is accessible as the protected field *$idObjectsAlertList* and initialized dunnig DataTransfer instantiation by AbstractDataTransferFactory.
 
 ####Keep me alive
 
-Calling the setAlive method on a regular basis is mandatory for the DataTransfer. Typically, this has to be done inside the main loop.
+A DataTransfer is forced to call the setAlive method on a regular basis, otherwise it will be cleaned by an executor. Typically, this has to be done inside the main loop.
+
 ```php
  $this->setAlive(true);
 ```
@@ -450,7 +457,8 @@ Conversely, when its execution is complete, the dataTransfer must report it.
  $this->setAlive(false);
 ```
 
-To stop execution prematurely, simply place a return statement.
+To stop execution prematurely, simply place a return statement in the run() function.
+
 ```php
  $this->setAlive(false);
  return;
@@ -458,8 +466,8 @@ To stop execution prematurely, simply place a return statement.
 
 ##Sheduling data transfer
 
-It's not enough to click on the checkboxes in the acquisition and export interfaces. An executor is to be launched every minute to update the status of data transfers, determine which ones are mature candidates for execution and launch one of them. 
-To enable scheduling, insert this line into your crontab :
+It's not enough to click on the checkboxes in the acquisition and export interfaces. An executor is to be launched every minute to update the status of data transfers, to determine which ones are "mature" candidates for execution and to launch one of them. 
+To enable scheduling, insert the following line into your crontab :
 
 ```sh
 */1 * * * * root  curl 'https://minibus-deployment-url/execution' -X POST -k >/dev/null 2>&1
