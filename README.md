@@ -269,13 +269,13 @@ Minibus depends on zfc-user module for authentication features.
 In the minibus-skeleton configuration sample, Zend User is based on an internal user table. Though, no user management is provider. *scripts/sql/minibus.user.sql* provides 2 basic users for application startup.
 By default, nitecon/zfcuser-ldap is installed with Minibus. To enable ldap connexion :
 
-* Enable 'ZfcUserLdap' in application.config.php
+* Enable module 'ZfcUserLdap' in application.config.php
 * In config/autoload/zfcuser.global.pgp, disable zend_db_adapter
 
 ```php
         // 'zend_db_adapter' => 'Zend\Db\Adapter\Adapter',
 ```
-*  and change user_entity_class
+*  Switch to zfc-user embedded User entity Class
 ```php
 		'user_entity_class' => 'ZfcUserLdap\Entity\User',
 ```
