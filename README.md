@@ -31,6 +31,10 @@ Minibus is intended for people who prefer coding data transfers in object orient
 A fake deployment is available [here](https://minibus.agroparistech.fr). You can connect as **admin** (password **admintest**) to access all the functionalities or as **guest** (password **guesttest**) for restricted access.
 A single type of data ("Foo/Bar") is exposed with two data transfer
 
+##Screenshots
+
+![Screen1](https://raw.githubusercontent.com/dsi-agpt/minibus/master/etc/screens/capt1.png)
+
 ##Features
 
 Currently, Minibus provides the following functionnalities :
