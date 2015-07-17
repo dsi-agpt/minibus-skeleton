@@ -79,7 +79,7 @@ In the sample deployment proposed here, the main module called Jobs is where you
 For complex or unusual data manipulations, you can implement your own controllers, services or helpers like in any ZF2 application.
 
 ###Database schema generation
-The directory Jobs\Model\Entity is expected to host the entities forming your specific data model. Two scripts are provided to launch the Doctrine tools, taking into account the local application configuration:
+The directory Jobs\Model\Entity is expected to host the entities forming your specific data model. Two scripts are available to run the Doctrine tools over your entity classes, taking into account the local application configuration:
 
 * scripts/doctrine-tools-update.sh for database schema forward generation
 * scripts/doctrine-tools-geters-setters.sh for automatic getters/setters generation in entity classes
