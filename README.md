@@ -50,9 +50,9 @@ Currently, Minibus provides the following functionnalities :
 * Data display with full text search
 * Connexion to databases, Rest client, Scp Client
 
-##Operating principle
+##The big picture
 
-Define your (possibly hierarchical) types of data. For each type of data, implement one or more **acquisition process**.
+Define your (possibly hierarchical) types of data. Create doctrine entities mathing the common data model for applications of the information system. For each type of data, implement one or more **acquisition process**.
 Acquisition process will connect to a remote endpoint (possibly internal to you information system), fetch and convert data to your reference model.  Then, implement one or more **export process** that will convert data and write it into your target applications.
 
 #Requirements
@@ -73,6 +73,7 @@ The directory Jobs\Model\ Entity is expected to host the entities forming your s
 * scripts/doctrine-tools-geters-setters.sh for automatic getters/setters generation in entity classes
 
 ##Local configuration
+
 After retrieving all dependencies via composer, copy minibus local configuration file vendor/dsi-agpt/minibus/config/minibus.local.php.dist to your autoload directory and remove .dist extension.
 
 This file must be carefully fulfilled. Edit parts marked by %% symbols. It allows Doctrine Tools to generate database schema for 2 entity directories : that of Minibus itself and that of you Data transfer process.
@@ -133,7 +134,9 @@ return array(
 ```
 
 ##Data types
+
 Data types hierachy (module/Jobs/config/data-types.php) is the core of your Minibus deployment. 
+
 ```php
 return array(
     //first level of data types, called, "Foo"
