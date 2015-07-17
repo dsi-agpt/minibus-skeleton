@@ -24,7 +24,8 @@ Minibus skeleton &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 
 Minibus skeleton is a sample implementation for Minibus application available on [Github](https://github.com/dsi-agpt/minibus) and [Packagist](https://packagist.org/packages/dsi-agpt/minibus). Minibus is a minimalist data bus written on top of Zend Framework 2 / Doctrine 2.
 It provides a framework to write data transfer scripts and a GUI to manage them.
-Minibus is intended for people who prefer coding data transfers in object oriented language rather than designing them via a graphic interface as that provided by ETL tools.
+Minibus is intended for people who prefer coding data transfers in object oriented language rather than designing them via a graphic interface as that provided by ETL tools. The main interest of Minibus, for an organization that already uses Zend and Doctrine in its projects, is to train its teams on these technologies instead of dispersing the skills to other tools such as ETL or Bus. Coding data transfers can be a good way to acclimate newcomers to this framework.
+Don't use Minibus if your transfers involve very large amounts of data or if you have important performance requirements. Indeed, Zend and the ORM layer will be detrimental with respect to the consumption of RAM and the execution time.
 
 ##Demo
 
