@@ -35,6 +35,8 @@ A single type of data ("Foo/Bar") is exposed with two data transfer
 
 ![Screen1](https://raw.githubusercontent.com/dsi-agpt/minibus/master/etc/screens/capt1.png)
 
+![Screen2](https://raw.githubusercontent.com/dsi-agpt/minibus/master/etc/screens/capt2.png)
+
 ##Features
 
 Currently, Minibus provides the following functionnalities :
