@@ -326,7 +326,7 @@ Minibus provides a lightweight data transfer framework that aims to simplify the
 Minibus is based on the regular launch of **executors**. An executor is set in motion by a POST request sent to the url */execution*. When launched, the executor:
 
 * Updates active data transfer process
-* Kill *zombi* data transfer
+* Kills *zombi* data transfer
 * Determines which data transfer are eligible for launch
 * Elects one of them and executes it
 
@@ -340,9 +340,9 @@ Each time an executor process is launched, it uses the following algorithm :
 * if an active process is running, and the boolean *alive* is set to *true*, set it to *false*
 * if an active process is running, and the boolean *alive* is set to *false*, treat it as *zombi*, which means killing the corresponding unix thread (known by its pid), and set the boolean *running* to *false*.
 
-Note that a process can be marked as *interrupted* from the outside (typically by pressing the power button * stop * on GUI Minibus). In this case, during the next call to setAlive, an exception is thrown inside the data transfer that will end the process.
+Note that a process can be marked as *interrupted* (typically by pressing the button *force stop* from Minibus GUI). In this case, during the next call to setAlive, an exception is thrown inside the data transfer that will end the process.
 
-If *setAlive* is never called, this will not happen, but the process will be cleaned "naturally" after two minutes at most, for the action of the executors. This algorithm is designed to prevent the accumulation of *zombies* process on the server when something goes wrong.
+If *setAlive* is never called, this will not happen, but the process will be cleaned "naturally" after two minutes at most, due to the action of the executors. This algorithm is designed to prevent the accumulation of *zombies* process on the server when something goes wrong.
 
 ###Creating a new data transfer
 
@@ -357,7 +357,7 @@ use Minibus\Model\Process\DataTransfer\Acquisition\AbstractDataAcquisitionAgent;
 class TransferAgent extends AbstractDataAcquisitionAgent
 {
 ```
-Then, register your TransferAgent in *module/Jobs/config/data-transfer-agents.php* :
+2. Then, register your TransferAgent in *module/Jobs/config/data-transfer-agents.php* :
 ```php
 'acquisition-students-registrationsytem' => array(
         'class' => 'Jobs\Model\Process\DataTransfer\Acquisition\Students\RegistrationSystem\TransferAgent'
@@ -368,7 +368,7 @@ Please pay attention to naming conventions used by minibus.
 If your data transfer is an *acquisition* process, if the transferred data are *students* and the source is *registrationsytem*, the key must be *acquisition-students-registrationsytem*.
 Inside the application a process is always identified by the key mode-datatype-endpoint-year. For non-annualized process, year is set to 0. For exemple, *acquisition-students-registrationsytem-0*. For annualized process, *acquisition-students-registrationsytem-2016* is not the same process as *acquisition-students-registrationsytem-2017*.
 
-You still have to mention that data transfer in one of the *source* (for acquisition) or *target* (for export) entries of your data type configuration file.
+3. You still have to mention that data transfer in one of the *source* (for acquisition) or *target* (for export) entries of your data type configuration file.
 
 ```php
 'persons' => array(
@@ -401,7 +401,7 @@ You still have to mention that data transfer in one of the *source* (for acquisi
             ),
 ```
 
-It's Minibus that will take care of initializing the connexion to the endpoint and inject it into the data transfer. The source (here *registrationsytems*) must be configured in *module/Jobs/config/data-endpoints.php*.
+4. It's Minibus that will take care of initializing the connexion to the endpoint and inject it into the data transfer. The source (here *registrationsytems*) must be configured in *module/Jobs/config/data-endpoints.php*.
 
 ```php
 			'registrationsytems' => array (
