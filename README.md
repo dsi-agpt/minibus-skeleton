@@ -316,3 +316,10 @@ Minibus provides a lightweight data transfer framework that aims to simplify the
 ###Data transfer Api
 
 ##Sheduling data transfer
+
+It's not enough to click on the checkboxes in the acquisition and export interfaces. An executor is to be launched every minute to update the status of data transfers, determine which ones are mature candidates for execution and launch one of them. 
+To enable scheduling, insert this line into your crontab :
+
+```sh
+*/1 * * * * root  curl 'https://your-fqdn/execution' -X POST -k >/dev/null 2>&1
+```
