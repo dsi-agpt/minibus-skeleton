@@ -2,26 +2,27 @@ Minibus skeleton &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb
 ================
 
 * [Presentation](#presentation)
-    * [Demo](#demo)
-    * [Screenshots](#screenshots)
-    * [Features](#features)
-    * [The big picture](#the-big-picture)
+  * [Demo](#demo)
+  * [Screenshots](#screenshots)
+  * [Features](#features)
+  * [The big picture](#the-big-picture)
+* [Technical instructions](#technical-instructions)
   * [Requirements](#requirements)
-  * [Technical instructions](#technical-instructions)
-    * [Application structure](#application-structure)
-    * [Local configuration](#local-configuration)
-    * [Data types](#data-types)
-    * [Endpoints configuration](#endpoints-configuration)
-    * [Access control lists](#access-control-lists)
-    * [Zfc-User configuration](#zfc-user-configuration)
-    * [Minibus data transfer framework](#minibus-data-transfer-framework)
-      * [The data transfer execution engine](#the-data-transfer-execution-engine)
-      * [Creating a new data transfer](#creating-a-new-data-transfer)
-      * [Data transfer Api](#data-transfer-api)
-        * [Logging](#logging)
-        * [Alerts](#alerts)
-        * [Keep me alive](#keep-me-alive)
-    * [Sheduling data transfer](#sheduling-data-transfer)
+  * [Application structure](#application-structure)
+  * [Local configuration](#local-configuration)
+  * [Data types](#data-types)
+  * [Endpoints configuration](#endpoints-configuration)
+  * [Access control lists](#access-control-lists)
+  * [Zfc-User configuration](#zfc-user-configuration)
+  * [Minibus data transfer framework](#minibus-data-transfer-framework)
+    * [The data transfer execution engine](#the-data-transfer-execution-engine)
+    * [Creating a new data transfer](#creating-a-new-data-transfer)
+    * [Data transfer Api](#data-transfer-api)
+      * [Logging](#logging)
+      * [Alerts](#alerts)
+      * [Keep me alive](#keep-me-alive)
+  * [Sheduling data transfer](#sheduling-data-transfer)
+
 
 
 
@@ -62,12 +63,12 @@ Currently, Minibus provides the following functionnalities :
 Define your (possibly classified by domains) types of data. Create doctrine entities representative of the common data model for applications of the information system. For each type of data, implement one or more **acquisition process**.
 Acquisition process will connect to a remote endpoint (possibly internal to you information system), fetch and convert data to your reference model.  Then, implement one or more **export process** that will convert data and write it into your target applications.
 
-#Requirements
+#Technical instructions
+
+##Requirements
 
 Minibus requires apache 2.x with mod rewrite, mysql, PHP>=5.4, mysql, php5-curl (if you wish to enable rest client), php5-intl, php5-ssh2 (for Scp endpoints), php5-mysql.
 For now, dependence to mysql is avoidable, but minibus uses "enum" type in its internal data model. Your RDBMS implementation must support this feature.
-
-#Technical instructions
 
 ##Application structure
 
