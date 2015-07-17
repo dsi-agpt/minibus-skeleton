@@ -1,22 +1,28 @@
 Minibus skeleton &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;![Minibus logo](https://raw.githubusercontent.com/dsi-agpt/minibus/master/assets/img/minibus-logo.png)
 ================
 
-  * [Presentation](#presentation)
+* [Presentation](#presentation)
     * [Demo](#demo)
+    * [Screenshots](#screenshots)
     * [Features](#features)
-    * [Operating principle](#operating-principle)
+    * [The big picture](#the-big-picture)
   * [Requirements](#requirements)
   * [Technical instructions](#technical-instructions)
     * [Application structure](#application-structure)
     * [Local configuration](#local-configuration)
     * [Data types](#data-types)
     * [Endpoints configuration](#endpoints-configuration)
+    * [Access control lists](#access-control-lists)
     * [Zfc-User configuration](#zfc-user-configuration)
     * [Minibus data transfer framework](#minibus-data-transfer-framework)
-      * [Data transfer execution engine](#data-transfer-execution-engine)
+      * [The data transfer execution engine](#the-data-transfer-execution-engine)
       * [Creating a new data transfer](#creating-a-new-data-transfer)
       * [Data transfer Api](#data-transfer-api)
+        * [Logging](#logging)
+        * [Alerts](#alerts)
+        * [Keep me alive](#keep-me-alive)
     * [Sheduling data transfer](#sheduling-data-transfer)
+
 
 
 
@@ -438,14 +444,17 @@ Calling the setAlive method on a regular basis is mandatory for the DataTransfer
  $this->setAlive(true);
 ```
 Conversely, when its execution is complete, the dataTransfer must report it.
+
 ```php
  $this->setAlive(false);
 ```
+
 To stop execution prematurely, simply place a return statement.
 ```php
  $this->setAlive(false);
  return;
 ```
+
 ##Sheduling data transfer
 
 It's not enough to click on the checkboxes in the acquisition and export interfaces. An executor is to be launched every minute to update the status of data transfers, determine which ones are mature candidates for execution and launch one of them. 
