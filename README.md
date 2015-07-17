@@ -310,9 +310,30 @@ return array (
 
 Minibus provides a lightweight data transfer framework that aims to simplify the writing of data transfers by supporting the plumbing and optimizing the error return.
 
-###Data transfer execution engine 
+###The data transfer execution engine 
+
+Minibus is based on the regular launch of **executors**. An executor is set in motion by a POST request sent to the url */execution*. When launched, the executor:
+
+* Updates active data transfer process
+* Kill *zombi* data transfer
+* Determines which data transfer are eligible for launch
+* Elects one of them and executes it
+
+Each time a data transfer process is launched an **execution** is instantiated and registered in database along with the unix pid of the current PHP thread.
+Any execution belongs to a process must be in one of the following states :
+* running
+* stopped
+
+Each process can be active or not. Only active process may be executed. An active process is marked as running. During the execution of the process, it is the responsibility of the code to set the boolean 'alive' to *true* on a regular basis (at least once per minute). This can be done through a call to the *setAlive* method provided by the data transfer API.
+Each time an executor process is launched, it uses the following algorithm :
+* if an active process is running, and the boolean *alive* is set to *true*, set it to *false*
+* if an active process is running, and the boolean *alive* is set to *false*, treat it as *zombi*, which means killing the corresponding unix thread (known by its pid), and set the boolean *running* to *false*
+Note that a process can be marked as *interrupted* from the outside (typically by pressing the power button * stop * on GUI Minibus). In this case, during the next call to setAlive, an exception is thrown inside the data transfer that will end the process.
+If *setAlive* is never called, this will not happen, but the process will be cleaned "naturally" after two minutes at most, for the action of the executors. This algorithm is designed to prevent the accumulation of *zombies* process on the server when something goes wrong.
 
 ###Creating a new data transfer
+
+
 
 ###Data transfer Api
 
@@ -322,5 +343,5 @@ It's not enough to click on the checkboxes in the acquisition and export interfa
 To enable scheduling, insert this line into your crontab :
 
 ```sh
-*/1 * * * * root  curl 'https://your-fqdn/execution' -X POST -k >/dev/null 2>&1
+*/1 * * * * root  curl 'https://minibus-deployment-url/execution' -X POST -k >/dev/null 2>&1
 ```
